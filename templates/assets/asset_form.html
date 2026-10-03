@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<h3 class="mb-3">{{ title }}</h3>
+<div class="card"><div class="card-body">
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <div class="mb-3">
+    <label class="form-label">附件（可多选）</label>
+    <input type="file" name="attachments" class="form-control" multiple>
+  </div>
+  <button class="btn btn-primary" type="submit">保存</button>
+  <a class="btn btn-link" href="{% url 'asset_list' %}">返回</a>
+</form>
+</div></div>
+{% endblock %}

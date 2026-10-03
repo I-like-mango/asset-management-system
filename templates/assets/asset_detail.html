@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}资产详情{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between mb-3">
+  <h3>{{ asset.asset_no }} · {{ asset.name }}</h3>
+  <div>
+    <a class="btn btn-outline-secondary btn-sm" href="{% url 'asset_qrcode' asset.pk %}" target="_blank">查看二维码</a>
+    {% if user.is_staff or user.groups.all.0.name == 'ADMIN' %}
+    <a class="btn btn-primary btn-sm" href="{% url 'asset_edit' asset.pk %}">编辑</a>
+    {% endif %}
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <table class="table bg-white">
+      <tr><th>分类</th><td>{{ asset.category.name }}</td></tr>
+      <tr><th>状态</th><td>{{ asset.get_status_display }}</td></tr>
+      <tr><th>品牌/型号</th><td>{{ asset.brand }} {{ asset.model }}</td></tr>
+      <tr><th>序列号</th><td>{{ asset.serial_no|default:"-" }}</td></tr>
+      <tr><th>位置</th><td>{{ asset.location|default:"-" }}</td></tr>
+      <tr><th>领用人</th><td>{{ asset.current_holder.username|default:"-" }}</td></tr>
+      <tr><th>领用/到期</th><td>{{ asset.loaned_at|default:"-" }} / {{ asset.due_at|default:"-" }}</td></tr>
+      <tr><th>备注</th><td>{{ asset.remark|default:"-"|linebreaksbr }}</td></tr>
+    </table>
+  </div>
+  <div class="col-md-6">
+    <h5>状态变更记录</h5>
+    <ul class="list-group mb-3">
+      {% for log in logs %}
+      <li class="list-group-item small">{{ log.created_at|date:"Y-m-d H:i" }} {{ log.from_status }} → {{ log.to_status }} · {{ log.note }}</li>
+      {% empty %}<li class="list-group-item text-muted">无记录</li>{% endfor %}
+    </ul>
+    <h5>领用历史</h5>
+    <ul class="list-group">
+      {% for loan in loans %}
+      <li class="list-group-item small">{{ loan.applied_at|date:"Y-m-d" }} {{ loan.applicant.username }} · {{ loan.get_status_display }}</li>
+      {% empty %}<li class="list-group-item text-muted">无记录</li>{% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

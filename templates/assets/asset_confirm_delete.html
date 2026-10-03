@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}删除资产{% endblock %}
+{% block content %}
+<h3>确认删除</h3>
+<p>确定软删除资产 <strong>{{ asset.asset_no }}</strong> 吗？</p>
+<form method="post">
+  {% csrf_token %}
+  <button class="btn btn-danger" type="submit">确认删除</button>
+  <a class="btn btn-link" href="{% url 'asset_detail' asset.pk %}">取消</a>
+</form>
+{% endblock %}

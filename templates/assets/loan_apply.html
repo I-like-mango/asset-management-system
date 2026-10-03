@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}领用申请{% endblock %}
+{% block content %}
+<h3 class="mb-3">领用申请</h3>
+<div class="card col-md-8"><div class="card-body">
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button class="btn btn-primary">提交申请</button>
+</form>
+</div></div>
+{% endblock %}

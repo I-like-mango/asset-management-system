@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}邮件日志{% endblock %}
+{% block content %}
+<h3 class="mb-3">邮件发送日志</h3>
+<table class="table table-sm bg-white">
+  <thead><tr><th>时间</th><th>收件人</th><th>主题</th><th>状态</th><th>重试</th><th></th></tr></thead>
+  <tbody>
+  {% for log in page_obj %}
+    <tr>
+      <td>{{ log.created_at|date:"Y-m-d H:i" }}</td>
+      <td>{{ log.recipient_email }}</td>
+      <td>{{ log.subject }}</td>
+      <td>{{ log.get_status_display }}</td>
+      <td>{{ log.retry_count }}</td>
+      <td>{% if log.status == 'failed' %}<a href="{% url 'email_retry' log.pk %}">重试</a>{% endif %}</td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="6" class="text-muted text-center">暂无记录</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% include "includes/pagination.html" with page_obj=page_obj %}
+{% endblock %}

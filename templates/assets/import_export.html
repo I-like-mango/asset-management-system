@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}导入导出{% endblock %}
+{% block content %}
+<h3 class="mb-3">导入导出</h3>
+<div class="row g-3">
+  <div class="col-md-6">
+    <div class="card"><div class="card-body">
+      <h5>导入资产</h5>
+      <p><a href="{% url 'import_template' %}">下载 Excel 模板</a></p>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="import">
+        {{ import_form.as_p }}
+        <button class="btn btn-primary">上传导入</button>
+      </form>
+      {% if import_result and import_result.errors %}
+      <div class="alert alert-danger mt-3">
+        <strong>错误报告：</strong>
+        <ul>{% for e in import_result.errors %}<li>{{ e }}</li>{% endfor %}</ul>
+      </div>
+      {% endif %}
+    </div></div>
+  </div>
+  <div class="col-md-6">
+    <div class="card"><div class="card-body">
+      <h5>导出资产</h5>
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="export">
+        {{ export_form.as_p }}
+        <button class="btn btn-outline-primary">导出 Excel</button>
+      </form>
+    </div></div>
+  </div>
+</div>
+{% endblock %}

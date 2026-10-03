@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}审批管理{% endblock %}
+{% block content %}
+<h3 class="mb-3">审批管理</h3>
+<ul class="nav nav-tabs mb-3">
+  <li class="nav-item"><a class="nav-link {% if current_status == 'pending' %}active{% endif %}" href="?status=pending">待审批</a></li>
+  <li class="nav-item"><a class="nav-link {% if current_status == 'return_pending' %}active{% endif %}" href="?status=return_pending">待确认归还</a></li>
+  <li class="nav-item"><a class="nav-link {% if current_status == 'approved' %}active{% endif %}" href="?status=approved">已通过</a></li>
+</ul>
+<table class="table bg-white">
+  <thead><tr><th>资产</th><th>申请人</th><th>状态</th><th>申请时间</th><th>操作</th></tr></thead>
+  <tbody>
+  {% for loan in page_obj %}
+    <tr>
+      <td>{{ loan.asset.asset_no }}</td>
+      <td>{{ loan.applicant.username }}</td>
+      <td>{{ loan.get_status_display }}</td>
+      <td>{{ loan.applied_at|date:"Y-m-d H:i" }}</td>
+      <td>
+        {% if loan.status == 'pending' %}
+        <a href="{% url 'approval_action' loan.pk 'approve' %}">通过</a>
+        <a href="{% url 'approval_action' loan.pk 'reject' %}">拒绝</a>
+        {% elif loan.status == 'return_pending' %}
+        <a href="{% url 'return_confirm' loan.pk %}">确认归还</a>
+        {% endif %}
+      </td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="5" class="text-center text-muted">暂无记录</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% include "includes/pagination.html" with page_obj=page_obj %}
+{% endblock %}

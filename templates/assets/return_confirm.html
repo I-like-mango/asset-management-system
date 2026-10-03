@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}确认归还{% endblock %}
+{% block content %}
+<h3>确认归还</h3>
+<p>资产 {{ loan.asset.asset_no }}，申请人 {{ loan.applicant.username }}</p>
+<form method="post">
+  {% csrf_token %}
+  <button class="btn btn-primary">确认入库</button>
+  <a class="btn btn-link" href="{% url 'approval_list' %}?status=return_pending">返回</a>
+</form>
+{% endblock %}

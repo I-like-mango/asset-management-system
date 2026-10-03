@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}角色管理{% endblock %}
+{% block content %}
+<h3 class="mb-3">角色管理</h3>
+<table class="table bg-white">
+  <thead><tr><th>角色</th><th>权限数量</th><th>操作</th></tr></thead>
+  <tbody>
+  {% for item in groups_data %}
+    <tr>
+      <td>{{ item.group.name }}</td>
+      <td>{{ item.perm_count }}</td>
+      <td><a href="{% url 'role_edit' item.group.pk %}">分配权限</a></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

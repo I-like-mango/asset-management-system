@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}我的申请{% endblock %}
+{% block content %}
+<h3 class="mb-3">我的申请</h3>
+<table class="table bg-white">
+  <thead><tr><th>资产</th><th>状态</th><th>申请时间</th><th>预计归还</th><th>操作</th></tr></thead>
+  <tbody>
+  {% for loan in page_obj %}
+    <tr>
+      <td>{{ loan.asset.asset_no }} {{ loan.asset.name }}</td>
+      <td>{{ loan.get_status_display }}</td>
+      <td>{{ loan.applied_at|date:"Y-m-d H:i" }}</td>
+      <td>{{ loan.expected_return_at|date:"Y-m-d H:i" }}</td>
+      <td>
+        {% if loan.status == 'approved' %}
+        <a href="{% url 'loan_return_request' loan.pk %}">申请归还</a>
+        {% endif %}
+      </td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="5" class="text-center text-muted">暂无申请</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% include "includes/pagination.html" with page_obj=page_obj %}
+{% endblock %}
